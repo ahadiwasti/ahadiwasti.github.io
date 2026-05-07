@@ -29,6 +29,17 @@ body {
   min-height: 100vh;
 }
 
+/* ── Banner ── */
+.banner {
+  background: #0d3d2e;
+  color: var(--accent);
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 0.6rem 1rem;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--accent2);
+}
+
 a {
   color: var(--accent);
   text-decoration: none;
