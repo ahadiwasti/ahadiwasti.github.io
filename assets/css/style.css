@@ -31,15 +31,16 @@ body {
 
 /* ── Banner ── */
 .banner {
-  background: #0d3d2e;
-  color: var(--accent);
+  background: #854F0B;
+  color: #FAC775;
   text-align: center;
   font-size: 0.82rem;
-  padding: 0.6rem 1rem;
-  letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--accent2);
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #EF9F27;
+  width: 100%;
 }
-
 a {
   color: var(--accent);
   text-decoration: none;
