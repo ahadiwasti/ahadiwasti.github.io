@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 function processPostDir(postDir, topCat, subCat = null) {
   if (!fs.existsSync(postDir)) return;
   const files = fs.readdirSync(postDir).filter(f => f.endsWith(".md"));
