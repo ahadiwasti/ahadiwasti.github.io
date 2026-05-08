@@ -556,7 +556,11 @@ footer p {
   background: var(--accent);
   color: #fff;
 }
-
+.post-card-link {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+}
 /* ── Responsive ── */
 
 @media (max-width: 600px) {

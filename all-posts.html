@@ -93,19 +93,20 @@
     }
 
     filtered.forEach(post => {
-      const div = document.createElement("div");
-      div.className = "post-card";
-      div.innerHTML = `
-        <div class="post-meta">
-          <span class="tag">${post.category.replace(/-/g, " ")}</span>
-          <span class="date">${post.date}</span>
-        </div>
-        <h3>
-          <a href="post.html?url=${encodeURIComponent(post.url)}">${post.title}</a>
-        </h3>
-      `;
-      container.appendChild(div);
-    });
+  const div = document.createElement("div");
+  div.className = "post-card";
+  div.innerHTML = `
+    <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card-link">
+      <div class="post-meta">
+        <span class="tag">${post.category}</span>
+        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
+        <span class="date">${post.date}</span>
+      </div>
+      <h3>${post.title}</h3>
+    </a>
+  `;
+  container.appendChild(div);
+});
   }
 
   document.getElementById("search").addEventListener("input", renderAll);
