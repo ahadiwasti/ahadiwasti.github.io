@@ -1,5 +1,14 @@
 const fs = require("fs");
 const path = require("path");
+
+const POSTS_DIR = path.join(__dirname, "../blog/posts");
+const OUTPUT = path.join(__dirname, "../blog/posts.json");
+const result = [];
+
+function isDir(p) {
+  return fs.statSync(p).isDirectory();
+}
+
 function processPostDir(postDir, topCat, subCat = null) {
   if (!fs.existsSync(postDir)) return;
   const files = fs.readdirSync(postDir).filter(f => f.endsWith(".md"));
@@ -34,12 +43,14 @@ for (const topCat of topCategories) {
   const subDirs = topContents.filter(f => isDir(path.join(topCatPath, f)));
 
   if (subDirs.length === 0) {
-    // Flat — process directly
     processPostDir(topCatPath, topCat, null);
   } else {
-    // Has subcategories — DSA/Array/, DSA/Stack/ etc
     for (const subCat of subDirs) {
       processPostDir(path.join(topCatPath, subCat), topCat, subCat);
     }
   }
 }
+
+result.sort((a, b) => new Date(b.date) - new Date(a.date));
+fs.writeFileSync(OUTPUT, JSON.stringify(result, null, 2));
+console.log(`Generated posts.json with ${result.length} posts`);
