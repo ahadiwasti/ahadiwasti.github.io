@@ -30,12 +30,47 @@
     fetch(decodeURIComponent(url))
       .then(r => r.text())
       .then(md => {
-        document.getElementById("post-content").innerHTML = marked.parse(md);
+        // Parse frontmatter
+        const fmMatch = md.match(/^---\n([\s\S]*?)\n---\n/);
+        const fm = {};
+        if (fmMatch) {
+          fmMatch[1].split("\n").forEach(line => {
+            const [key, ...val] = line.split(":");
+            if (key && val) fm[key.trim()] = val.join(":").trim();
+          });
+        }
+
+        // Strip frontmatter from content
+        const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+
+        // Build breadcrumb
+        const parts = [fm.category, fm.subcategory, ...(fm.breadcrumb ? fm.breadcrumb.split("/") : [])].filter(Boolean);
+        const breadcrumb = parts.map((p, i) =>
+          i === parts.length - 1
+            ? `<span class="bc-current">${p.replace(/-/g, " ")}</span>`
+            : `<span class="bc-item">${p.replace(/-/g, " ")}</span><span class="bc-sep">/</span>`
+        ).join("");
+
+        // Set page title
+        document.title = `${fm.title || "Post"} — ahadiwasti`;
+
+        // Inject breadcrumb + content
+        document.getElementById("post-content").innerHTML = `
+          <div class="post-breadcrumb">${breadcrumb}</div>
+          <div class="post-dates">
+            <span>Published ${fm.created_at}</span>
+            ${fm.updated_at && fm.updated_at !== fm.created_at
+              ? `<span class="updated">· Updated ${fm.updated_at}</span>`
+              : ""}
+          </div>
+          <div class="post-body">${marked.parse(content)}</div>
+        `;
       })
       .catch(() => {
         document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
       });
   }
+
   </script>
 </body>
 </html>
