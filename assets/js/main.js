@@ -83,7 +83,8 @@ function postCardHTML(post) {
   return `
     <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card">
       <div class="post-meta">
-        <span class="tag">${post.category.replace(/-/g, " ")}</span>
+        <span class="tag">${post.category}</span>
+        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
         <span class="date">${post.date}</span>
       </div>
       <h3>${post.title}</h3>
