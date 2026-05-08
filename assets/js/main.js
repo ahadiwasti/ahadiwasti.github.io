@@ -81,13 +81,13 @@ function renderPosts(filter) {
 
 function postCardHTML(post) {
   return `
-    <div class="post-card">
+    <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card">
       <div class="post-meta">
         <span class="tag">${post.category.replace(/-/g, " ")}</span>
         <span class="date">${post.date}</span>
       </div>
-      <h3><a href="post.html?url=${encodeURIComponent(post.url)}">${post.title}</a></h3>
-    </div>
+      <h3>${post.title}</h3>
+    </a>
   `;
 }
 
