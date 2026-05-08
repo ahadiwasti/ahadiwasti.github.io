@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (for when we move to Next.js in Phase 2)
+node_modules/
+npm-debug.log
+.env
+.env.local
+.env.production
+
+# Build outputs (Phase 2)
+.next/
+dist/
+build/
+
+# Logs
+*.log
