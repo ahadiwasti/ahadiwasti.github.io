@@ -80,12 +80,16 @@ function renderPosts(filter) {
 }
 
 function postCardHTML(post) {
+  const dateDisplay = post.updated_at && post.updated_at !== post.created_at
+    ? `<span class="date" title="Updated ${post.updated_at}">📝 ${post.created_at}</span>`
+    : `<span class="date">${post.created_at}</span>`;
+
   return `
     <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card">
       <div class="post-meta">
         <span class="tag">${post.category}</span>
         ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
-        <span class="date">${post.date}</span>
+        ${dateDisplay}
       </div>
       <h3>${post.title}</h3>
     </a>
