@@ -921,7 +921,71 @@ body.light .banner {
   background: #854F0B;
   color: #FAC775;
 }
+/* ── 404 page ── */
 
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 1.5rem;
+  gap: 1rem;
+}
+
+.not-found-code {
+  font-size: 8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--border);
+  letter-spacing: -0.04em;
+}
+
+.not-found-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.not-found-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  max-width: 360px;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.not-found-btn {
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+
+.not-found-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.not-found-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.not-found-btn.primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+}
 /* ── Responsive ── */
 
 @media (max-width: 600px) {
