@@ -1,0 +1,117 @@
+name: Full resync to portfolio
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Which repo to resync'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - DSA
+          - System-Design
+
+jobs:
+  resync:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - repo: ahadiwasti/DSA
+            category: DSA
+          - repo: ahadiwasti/System-Design
+            category: System-Design
+
+    steps:
+      - name: Skip if not selected
+        if: ${{ github.event.inputs.repo != 'all' && github.event.inputs.repo != matrix.category }}
+        run: echo "Skipping ${{ matrix.category }}" && exit 0
+
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.repo }}
+          token: ${{ secrets.PORTFOLIO_TOKEN }}
+          path: source
+
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v4
+        with:
+          repository: ahadiwasti/ahadiwasti.github.io
+          token: ${{ secrets.PORTFOLIO_TOKEN }}
+          path: portfolio
+
+      - name: Clear and resync all posts
+        env:
+          GH_TOKEN: ${{ secrets.PORTFOLIO_TOKEN }}
+        run: |
+          REPO_CATEGORY="${{ matrix.category }}"
+          REPO="${{ matrix.repo }}"
+
+          echo "=== Resyncing $REPO_CATEGORY ==="
+
+          # Clear existing posts for this category
+          rm -rf portfolio/blog/posts/$REPO_CATEGORY
+          mkdir -p portfolio/blog/posts/$REPO_CATEGORY
+
+          # Find all README.md files at any depth, skip root and .github
+          find source -name "README.md" | grep -v "source/.github" | grep -v "^source/README.md$" | while read file; do
+            RELATIVE=$(echo "$file" | sed 's|source/||' | sed 's|/README.md||')
+            DEPTH=$(echo "$RELATIVE" | tr '/' '\n' | wc -l)
+            TITLE=$(echo "$RELATIVE" | awk -F'/' '{print $NF}')
+
+            if [ "$DEPTH" -eq 1 ]; then
+              SUBCATEGORY=$RELATIVE
+              BREADCRUMB=""
+            elif [ "$DEPTH" -eq 2 ]; then
+              SUBCATEGORY=$(echo "$RELATIVE" | cut -d'/' -f1)
+              BREADCRUMB=""
+            else
+              SUBCATEGORY=$(echo "$RELATIVE" | cut -d'/' -f1)
+              BREADCRUMB=$(echo "$RELATIVE" | cut -d'/' -f2-$((DEPTH-1)))
+            fi
+
+            echo "Processing: $RELATIVE | Subcategory: $SUBCATEGORY | Breadcrumb: $BREADCRUMB"
+
+            # Skip if publish: false
+            if grep -q "publish: false" "$file" 2>/dev/null; then
+              echo "Skipping $RELATIVE (publish: false)"
+              continue
+            fi
+
+            DATES=$(python3 source/scripts/get-commit-dates.py "$REPO" "$RELATIVE" "$GH_TOKEN")
+            FIRST_DATE=$(echo $DATES | cut -d',' -f1)
+            LAST_DATE=$(echo $DATES | cut -d',' -f2)
+
+            FILENAME=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
+
+            mkdir -p "portfolio/blog/posts/$REPO_CATEGORY/$SUBCATEGORY"
+
+            {
+              echo "---"
+              echo "title: $(echo $TITLE | sed 's/-/ /g')"
+              echo "created_at: $FIRST_DATE"
+              echo "updated_at: $LAST_DATE"
+              echo "category: $REPO_CATEGORY"
+              echo "subcategory: $SUBCATEGORY"
+              if [ ! -z "$BREADCRUMB" ]; then
+                echo "breadcrumb: $BREADCRUMB"
+              fi
+              echo "---"
+              echo ""
+              cat "$file"
+            } > "portfolio/blog/posts/$REPO_CATEGORY/$SUBCATEGORY/$FIRST_DATE-$FILENAME.md"
+
+            echo "Synced: $TITLE → $FIRST_DATE-$FILENAME.md"
+          done
+
+      - name: Commit and push
+        run: |
+          cd portfolio
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add blog/posts/
+          git diff --staged --quiet || git commit -m "full resync: ${{ matrix.category }} posts"
+          git push
