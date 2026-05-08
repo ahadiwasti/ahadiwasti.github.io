@@ -79,7 +79,13 @@
     </a>
   </div>
 </div>
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+  <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+  </svg>
+</button>
     </div>
+  
   </header>
 <section id="about">
   <div class="about-inner">
@@ -108,26 +114,32 @@
     </div>
   </div>
 </section>
-  <main>
-    <section id="blog">
-      <div class="section-header">
-        <h2>Learning log</h2>
-        <div class="filters">
-          <button class="filter active" data-tag="all">All</button>
-          <button class="filter" data-tag="DSA">DSA</button>
-          <button class="filter" data-tag="System Design">System Design</button>
-          <button class="filter" data-tag="Python">Python</button>
-          <button class="filter" data-tag="AI">AI</button>
+ <main>
+  <section id="blog">
+    <div class="section-header">
+      <h2>Learning logs</h2>
+      <div class="filters"></div>
+    </div>
+    <div id="posts-list">
+      <div class="post-loader">
+        <div class="loader-dots">
+          <span></span><span></span><span></span>
         </div>
+        <p class="loader-text">Loading</p>
       </div>
-      <div id="posts-list"></div>
-    </section>
-  </main>
-
+    </div>
+  </section>
+</main>
+<button class="back-to-top" id="backToTop" title="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>
+    </button>
   <footer>
     <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>

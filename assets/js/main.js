@@ -1,6 +1,12 @@
 async function buildPostList() {
+  const start = Date.now();
   const res = await fetch("blog/posts.json");
   const allPosts = await res.json();
+
+  const elapsed = Date.now() - start;
+  const remaining = Math.max(0, 1500 - elapsed);
+  await new Promise(resolve => setTimeout(resolve, remaining));
+
   window.allPosts = allPosts;
 
   // Build filter tabs dynamically from categories
@@ -31,25 +37,23 @@ function renderPosts(filter) {
   const container = document.getElementById("posts-list");
   container.innerHTML = "";
 
-if (filter === "all") {
-  // Show 3 most recent posts across ALL categories
-  const top3 = window.allPosts.slice(0, 3);
+  if (filter === "all") {
+    const top3 = window.allPosts.slice(0, 3);
+    const section = document.createElement("div");
+    section.className = "category-section";
+    section.innerHTML = `
+      <div class="category-posts">
+        ${top3.map(post => postCardHTML(post)).join("")}
+      </div>
+    `;
+    container.appendChild(section);
 
-  const section = document.createElement("div");
-  section.className = "category-section";
-  section.innerHTML = `
-    <div class="category-posts">
-      ${top3.map(post => postCardHTML(post)).join("")}
-    </div>
-  `;
-  container.appendChild(section);
+    const viewAll = document.createElement("div");
+    viewAll.className = "view-all-wrap";
+    viewAll.innerHTML = `<a href="all-posts.html" class="view-all-btn">View all posts →</a>`;
+    container.appendChild(viewAll);
 
-  // View all button
-  const viewAll = document.createElement("div");
-  viewAll.className = "view-all-wrap";
-  viewAll.innerHTML = `<a href="all-posts.html" class="view-all-btn">View all posts →</a>`;
-  container.appendChild(viewAll);
-} else {
+  } else {
     const filtered = window.allPosts.filter(p => p.category === filter);
     const top3 = filtered.slice(0, 3);
 
@@ -88,7 +92,7 @@ function postCardHTML(post) {
     </a>
   `;
 }
-document.getElementById("posts-list").innerHTML = "<p class='empty'>Loading posts...</p>";
+
 buildPostList().catch(err => {
   console.error(err);
   document.getElementById("posts-list").innerHTML = "<p class='empty'>Could not load posts.</p>";

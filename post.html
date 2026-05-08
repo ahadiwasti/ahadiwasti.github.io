@@ -1,76 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Post — ahadiwasti</title>
-  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 </head>
-<body>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="back">← Back to learning log</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+          <svg
+            id="themeIcon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
+          </svg>
+        </button>
+      </div>
+    </header>
 
-  <header>
-    <div class="header-inner">
-      <a href="index.html" class="back">← Back to learning log</a>
+    <main>
+      <article id="post-content">
+  <div class="post-loader">
+    <div class="loader-dots">
+      <span></span><span></span><span></span>
     </div>
-  </header>
+    <p class="loader-text">Loading</p>
+  </div>
+</article>
+    </main>
+    <button class="back-to-top" id="backToTop" title="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>
+    </button>
+    <footer>
+      <p>
+        Built in public ·
+        <a
+          href="https://github.com/ahadiwasti/ahadiwasti.github.io"
+          target="_blank"
+          >View source</a
+        >
+      </p>
+    </footer>
 
-  <main>
-    <article id="post-content">Loading...</article>
-  </main>
+    <script>
+   
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get("url");
+    if (url) {
+      const start = Date.now();
+      fetch(decodeURIComponent(url))
+        .then((r) => r.text())
+        .then((md) => {
+          const elapsed = Date.now() - start;
+          const remaining = Math.max(0, 1500 - elapsed);
+          setTimeout(() => {
+            // Parse frontmatter
+            const fmMatch = md.match(/^---\n([\s\S]*?)\n---\n/);
+            const fm = {};
+            if (fmMatch) {
+              fmMatch[1].split("\n").forEach((line) => {
+                const [key, ...val] = line.split(":");
+                if (key && val) fm[key.trim()] = val.join(":").trim();
+              });
+            }
 
-  <footer>
-    <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
-  </footer>
+            // Strip frontmatter from content
+            const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
 
-  <script>
-  const params = new URLSearchParams(window.location.search);
-  const url = params.get("url");
-  if (url) {
-    fetch(decodeURIComponent(url))
-      .then(r => r.text())
-      .then(md => {
-        // Parse frontmatter
-        const fmMatch = md.match(/^---\n([\s\S]*?)\n---\n/);
-        const fm = {};
-        if (fmMatch) {
-          fmMatch[1].split("\n").forEach(line => {
-            const [key, ...val] = line.split(":");
-            if (key && val) fm[key.trim()] = val.join(":").trim();
-          });
-        }
+            // Build breadcrumb
+            const parts = [
+              fm.category,
+              fm.subcategory,
+              ...(fm.breadcrumb ? fm.breadcrumb.split("/") : []),
+            ].filter(Boolean);
 
-        // Strip frontmatter from content
-        const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+            const breadcrumb = parts.map((p, i) => {
+              const label = p.replace(/-/g, " ");
+              if (i === parts.length - 1) {
+                return `<span class="bc-current">${label}</span>`;
+              }
+              const href = i === 0
+                ? `all-posts.html?category=${encodeURIComponent(fm.category)}`
+                : `all-posts.html?category=${encodeURIComponent(fm.category)}&subcategory=${encodeURIComponent(p)}`;
+              return `<a href="${href}" class="bc-item">${label}</a><span class="bc-sep">/</span>`;
+            }).join("");
 
-        // Build breadcrumb
-        const parts = [fm.category, fm.subcategory, ...(fm.breadcrumb ? fm.breadcrumb.split("/") : [])].filter(Boolean);
-        const breadcrumb = parts.map((p, i) =>
-          i === parts.length - 1
-            ? `<span class="bc-current">${p.replace(/-/g, " ")}</span>`
-            : `<span class="bc-item">${p.replace(/-/g, " ")}</span><span class="bc-sep">/</span>`
-        ).join("");
+            // Set page title
+            document.title = `${fm.title || "Post"} — ahadiwasti`;
 
-        // Set page title
-        document.title = `${fm.title || "Post"} — ahadiwasti`;
+            // Inject breadcrumb + content
+            document.getElementById("post-content").innerHTML = `
+              <div class="post-breadcrumb">${breadcrumb}</div>
+              <div class="post-dates">
+                <span>Published ${fm.created_at}</span>
+                ${fm.updated_at && fm.updated_at !== fm.created_at
+                  ? `<span class="updated">· Updated ${fm.updated_at}</span>`
+                  : ""}
+              </div>
+              <div class="post-body">${marked.parse(content)}</div>
+            `;
+          }, remaining);
+        })
+        .catch(() => {
+          document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
+        });
+    }
+  });
 
-        // Inject breadcrumb + content
-        document.getElementById("post-content").innerHTML = `
-          <div class="post-breadcrumb">${breadcrumb}</div>
-          <div class="post-dates">
-            <span>Published ${fm.created_at}</span>
-            ${fm.updated_at && fm.updated_at !== fm.created_at
-              ? `<span class="updated">· Updated ${fm.updated_at}</span>`
-              : ""}
-          </div>
-          <div class="post-body">${marked.parse(content)}</div>
-        `;
-      })
-      .catch(() => {
-        document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
-      });
-  }
-
-  </script>
-</body>
+    </script>
+    <script src="assets/js/theme.js"></script>
+    
+  </body>
 </html>

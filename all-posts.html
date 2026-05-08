@@ -1,122 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>All Posts — ahadiwasti</title>
-  <link rel="stylesheet" href="assets/css/style.css"/>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-</head>
-<body>
-
-  <header>
-    <div class="header-inner">
-      <a href="index.html" class="back">← Back to learning log</a>
-    </div>
-  </header>
-
-  <main>
-    <div class="category-page-header">
-      <h2 id="page-title">All Posts</h2>
-      <span id="post-count" class="muted-count"></span>
-    </div>
-
-    <div class="cat-controls">
-      <input type="text" id="search" placeholder="Search posts..." class="search-input"/>
-      <select id="category-filter" class="sort-select">
-        <option value="all">All categories</option>
-      </select>
-      <select id="sort" class="sort-select">
-        <option value="newest">Newest first</option>
-        <option value="oldest">Oldest first</option>
-        <option value="alpha">A → Z</option>
-      </select>
-    </div>
-
-    <div id="all-posts-list"></div>
-  </main>
-
-  <footer>
-    <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
-  </footer>
-
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const preselectedCategory = params.get("category") || "all";
-  let allPosts = [];
-
-  async function loadAllPosts() {
-    const res = await fetch("blog/posts.json");
-    allPosts = await res.json();
-
-    // Populate category dropdown
-    const categories = [...new Set(allPosts.map(p => p.category))];
-    const catSelect = document.getElementById("category-filter");
-    categories.forEach(cat => {
-      const opt = document.createElement("option");
-      opt.value = cat;
-      opt.textContent = cat.replace(/-/g, " ");
-      if (cat === preselectedCategory) opt.selected = true;
-      catSelect.appendChild(opt);
-    });
-
-    if (preselectedCategory !== "all") {
-      document.getElementById("page-title").textContent = preselectedCategory.replace(/-/g, " ");
-      document.title = `${preselectedCategory.replace(/-/g, " ")} — ahadiwasti`;
-    }
-
-    renderAll();
-  }
-
-  function renderAll() {
-    const query = document.getElementById("search").value.toLowerCase();
-    const catFilter = document.getElementById("category-filter").value;
-    const sort = document.getElementById("sort").value;
-
-    let filtered = allPosts
-      .filter(p => catFilter === "all" || p.category === catFilter)
-      .filter(p => p.title.toLowerCase().includes(query));
-
-    if (sort === "newest") filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-    if (sort === "alpha") filtered.sort((a, b) => a.title.localeCompare(b.title));
-
-    document.getElementById("post-count").textContent =
-      `${filtered.length} post${filtered.length !== 1 ? "s" : ""}`;
-
-    const container = document.getElementById("all-posts-list");
-    container.innerHTML = "";
-
-    if (filtered.length === 0) {
-      container.innerHTML = "<p class='empty'>No posts found.</p>";
-      return;
-    }
-
-    filtered.forEach(post => {
-  const div = document.createElement("div");
-  div.className = "post-card";
-  div.innerHTML = `
-    <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card-link">
-      <div class="post-meta">
-        <span class="tag">${post.category}</span>
-        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
-        <span class="date">${post.date}</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Posts — ahadiwasti</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>"/>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="back">← Back to learning log</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+          <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
+          </svg>
+        </button>
       </div>
-      <h3>${post.title}</h3>
-    </a>
-  `;
-  container.appendChild(div);
-});
-  }
+    </header>
 
-  document.getElementById("search").addEventListener("input", renderAll);
-  document.getElementById("category-filter").addEventListener("change", renderAll);
-  document.getElementById("sort").addEventListener("change", renderAll);
+    <main>
+      <div class="category-page-header">
+        <h2 id="page-title">All Posts</h2>
+        <span id="post-count" class="muted-count"></span>
+      </div>
 
-  document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Loading...</p>";
-  loadAllPosts().catch(() => {
-    document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Could not load posts.</p>";
-  });
-</script>
-</body>
+      <div class="cat-controls">
+        <input type="text" id="search" placeholder="Search posts..." class="search-input"/>
+        <select id="category-filter" class="sort-select">
+          <option value="all">All categories</option>
+        </select>
+        <select id="sort" class="sort-select">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="alpha">A → Z</option>
+        </select>
+      </div>
+
+      <div id="all-posts-list">
+        <div class="post-loader">
+          <div class="loader-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <p class="loader-text">Loading</p>
+        </div>
+      </div>
+    </main>
+
+    <button class="back-to-top" id="backToTop" title="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>
+    </button>
+
+    <footer>
+      <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
+    </footer>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const preselectedCategory = params.get("category") || "all";
+      let allPosts = [];
+
+      async function loadAllPosts() {
+        const start = Date.now();
+        const res = await fetch("blog/posts.json");
+        allPosts = await res.json();
+
+        const elapsed = Date.now() - start;
+        const remaining = Math.max(0, 1500 - elapsed);
+        await new Promise(resolve => setTimeout(resolve, remaining));
+
+        // Populate category dropdown
+        const categories = [...new Set(allPosts.map(p => p.category))];
+        const catSelect = document.getElementById("category-filter");
+        categories.forEach(cat => {
+          const opt = document.createElement("option");
+          opt.value = cat;
+          opt.textContent = cat.replace(/-/g, " ");
+          if (cat === preselectedCategory) opt.selected = true;
+          catSelect.appendChild(opt);
+        });
+
+        if (preselectedCategory !== "all") {
+          document.getElementById("page-title").textContent = preselectedCategory.replace(/-/g, " ");
+          document.title = `${preselectedCategory.replace(/-/g, " ")} — ahadiwasti`;
+        }
+
+        renderAll();
+      }
+
+      function renderAll() {
+        const query = document.getElementById("search").value.toLowerCase();
+        const catFilter = document.getElementById("category-filter").value;
+        const sort = document.getElementById("sort").value;
+
+        let filtered = allPosts
+          .filter(p => catFilter === "all" || p.category === catFilter)
+          .filter(p => p.title.toLowerCase().includes(query));
+
+        if (sort === "newest") filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new new Date(b.date));
+        if (sort === "alpha") filtered.sort((a, b) => a.title.localeCompare(b.title));
+
+        document.getElementById("post-count").textContent =
+          `${filtered.length} post${filtered.length !== 1 ? "s" : ""}`;
+
+        const container = document.getElementById("all-posts-list");
+        container.innerHTML = "";
+
+        if (filtered.length === 0) {
+          container.innerHTML = "<p class='empty'>No posts found.</p>";
+          return;
+        }
+
+        filtered.forEach(post => {
+          const a = document.createElement("a");
+          a.className = "post-card";
+          a.href = `post.html?url=${encodeURIComponent(post.url)}`;
+          a.innerHTML = `
+            <div class="post-meta">
+              <span class="date">${post.date}</span>
+            </div>
+            <h3>${post.title}</h3>
+            <div class="post-tags">
+              <span class="tag">${post.category}</span>
+              ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
+              ${post.breadcrumb ? post.breadcrumb.split("/").map(b => `<span class="subtag">${b.replace(/-/g, " ")}</span>`).join("") : ""}
+            </div>
+          `;
+          container.appendChild(a);
+        });
+      }
+
+      document.getElementById("search").addEventListener("input", renderAll);
+      document.getElementById("category-filter").addEventListener("change", renderAll);
+      document.getElementById("sort").addEventListener("change", renderAll);
+
+      loadAllPosts().catch(() => {
+        document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Could not load posts.</p>";
+      });
+    </script>
+    <script src="assets/js/theme.js"></script>
+  </body>
 </html>
