@@ -99,17 +99,6 @@
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Introduction/2025-09-30-ideas.md"
   },
   {
-    "title": "Introduction",
-    "created_at": "2025-09-30",
-    "updated_at": "2025-10-06",
-    "date": "2025-09-30",
-    "category": "DSA",
-    "subcategory": "Introduction",
-    "breadcrumb": null,
-    "path": "blog/posts/DSA/Introduction/2025-09-30-introduction.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Introduction/2025-09-30-introduction.md"
-  },
-  {
     "title": "Practice",
     "created_at": "2025-09-30",
     "updated_at": "2025-09-30",
@@ -121,17 +110,6 @@
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Introduction/2025-09-30-practice.md"
   },
   {
-    "title": "Testing",
-    "created_at": "2025-09-30",
-    "updated_at": "2025-09-30",
-    "date": "2025-09-30",
-    "category": "DSA",
-    "subcategory": "Testing",
-    "breadcrumb": null,
-    "path": "blog/posts/DSA/Testing/2025-09-30-testing.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Testing/2025-09-30-testing.md"
-  },
-  {
     "title": "Alternatively Merge two Strings",
     "created_at": "2025-09-29",
     "updated_at": "2026-05-08",
@@ -141,27 +119,5 @@
     "breadcrumb": null,
     "path": "blog/posts/DSA/Array/2025-09-29-alternatively-merge-two-strings.md",
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Array/2025-09-29-alternatively-merge-two-strings.md"
-  },
-  {
-    "title": "Array",
-    "created_at": "2025-09-29",
-    "updated_at": "2026-05-08",
-    "date": "2025-09-29",
-    "category": "DSA",
-    "subcategory": "Array",
-    "breadcrumb": null,
-    "path": "blog/posts/DSA/Array/2025-09-29-array.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Array/2025-09-29-array.md"
-  },
-  {
-    "title": "README.md",
-    "created_at": "2025-09-21",
-    "updated_at": "2025-09-30",
-    "date": "2025-09-21",
-    "category": "DSA",
-    "subcategory": "README.md",
-    "breadcrumb": null,
-    "path": "blog/posts/DSA/README.md/2025-09-21-readme.md.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/README.md/2025-09-21-readme.md.md"
   }
 ]
