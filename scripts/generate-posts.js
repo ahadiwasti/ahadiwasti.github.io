@@ -28,7 +28,7 @@ function processPostDir(postDir, topCat, subCat = null) {
       category: topCat,
       subcategory: subCat,
       path: relativePath,
-      url: `https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/${relativePath}`
+      url: `https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/${relativePath.split('/').map(encodeURIComponent).join('/')}`
     });
   }
 }
