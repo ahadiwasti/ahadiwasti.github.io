@@ -617,6 +617,12 @@ footer p {
   background: var(--bg2);
   transition: all 0.2s;
 }
+.post-tags {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
 
 .social-pill:hover {
   color: var(--accent);

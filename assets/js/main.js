@@ -31,34 +31,25 @@ function renderPosts(filter) {
   const container = document.getElementById("posts-list");
   container.innerHTML = "";
 
-  if (filter === "all") {
-    const grouped = {};
-    window.allPosts.forEach(post => {
-      if (!grouped[post.category]) grouped[post.category] = [];
-      grouped[post.category].push(post);
-    });
+if (filter === "all") {
+  // Show 3 most recent posts across ALL categories
+  const top3 = window.allPosts.slice(0, 3);
 
-    Object.entries(grouped).forEach(([catName, posts]) => {
-      const top3 = posts.slice(0, 3);
-      const section = document.createElement("div");
-      section.className = "category-section";
-      section.innerHTML = `
-        <div class="category-header">
-          <h3 class="category-title">${catName.replace(/-/g, " ")}</h3>
-        </div>
-        <div class="category-posts">
-          ${top3.map(post => postCardHTML(post)).join("")}
-        </div>
-      `;
-      container.appendChild(section);
-    });
+  const section = document.createElement("div");
+  section.className = "category-section";
+  section.innerHTML = `
+    <div class="category-posts">
+      ${top3.map(post => postCardHTML(post)).join("")}
+    </div>
+  `;
+  container.appendChild(section);
 
-    const viewAll = document.createElement("div");
-    viewAll.className = "view-all-wrap";
-    viewAll.innerHTML = `<a href="all-posts.html" class="view-all-btn">View all posts →</a>`;
-    container.appendChild(viewAll);
-
-  } else {
+  // View all button
+  const viewAll = document.createElement("div");
+  viewAll.className = "view-all-wrap";
+  viewAll.innerHTML = `<a href="all-posts.html" class="view-all-btn">View all posts →</a>`;
+  container.appendChild(viewAll);
+} else {
     const filtered = window.allPosts.filter(p => p.category === filter);
     const top3 = filtered.slice(0, 3);
 
@@ -81,17 +72,19 @@ function renderPosts(filter) {
 
 function postCardHTML(post) {
   const dateDisplay = post.updated_at && post.updated_at !== post.created_at
-    ? `<span class="date" title="Updated ${post.updated_at}">📝 ${post.created_at}</span>`
-    : `<span class="date">${post.created_at}</span>`;
+    ? `<span class="date" title="Updated ${post.updated_at}">📝 ${post.date}</span>`
+    : `<span class="date">${post.date}</span>`;
 
   return `
     <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card">
       <div class="post-meta">
-        <span class="tag">${post.category}</span>
-        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
         ${dateDisplay}
       </div>
       <h3>${post.title}</h3>
+      <div class="post-tags">
+        <span class="tag">${post.category}</span>
+        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
+      </div>
     </a>
   `;
 }
