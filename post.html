@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" id="meta-description" content="ahadiwasti — Senior Software Engineer building in public."/>
+<meta property="og:title" id="og-title" content="ahadiwasti — Senior Software Engineer"/>
+<meta property="og:description" id="og-description" content="ahadiwasti — Senior Software Engineer building in public."/>
+<meta property="og:url" id="og-url" content="https://ahadiwasti.com"/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://ahadiwasti.com/assets/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" id="twitter-title" content="ahadiwasti — Senior Software Engineer"/>
+<meta name="twitter:description" id="twitter-description" content="ahadiwasti — Senior Software Engineer building in public."/>
   <title>Post — ahadiwasti</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
@@ -98,7 +107,17 @@
 
             // Set page title
             document.title = `${fm.title || "Post"} — ahadiwasti`;
+            // Dynamic meta tags
+const description = content.replace(/[#*`\[\]]/g, "").trim().split("\n").find(l => l.trim().length > 50) || "Read this post on ahadiwasti.com";
+const shortDesc = description.slice(0, 160);
+const pageTitle = `${fm.title} — ahadiwasti`;
 
+document.getElementById("meta-description").setAttribute("content", shortDesc);
+document.getElementById("og-title").setAttribute("content", pageTitle);
+document.getElementById("og-description").setAttribute("content", shortDesc);
+document.getElementById("og-url").setAttribute("content", window.location.href);
+document.getElementById("twitter-title").setAttribute("content", pageTitle);
+document.getElementById("twitter-description").setAttribute("content", shortDesc);
             // Inject breadcrumb + content
             document.getElementById("post-content").innerHTML = `
               <div class="post-breadcrumb">${breadcrumb}</div>

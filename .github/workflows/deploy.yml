@@ -39,6 +39,17 @@ jobs:
           git add blog/posts.json
           git diff --staged --quiet || git commit -m "auto: regenerate posts.json"
           git push
+      
+      - name: Generate sitemap.xml
+        run: node scripts/generate-sitemap.js
+    
+      - name: Commit posts.json and sitemap
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add blog/posts.json sitemap.xml
+          git diff --staged --quiet || git commit -m "auto: regenerate posts.json and sitemap.xml"
+          git push
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
