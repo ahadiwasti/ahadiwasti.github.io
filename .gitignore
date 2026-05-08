@@ -1,7 +1,8 @@
 # OS
 .DS_Store
 Thumbs.db
-
+#secret.txt
+secrets
 # Editor
 .vscode/
 .idea/

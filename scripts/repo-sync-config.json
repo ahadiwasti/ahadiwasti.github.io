@@ -1,0 +1,24 @@
+{
+  "repos": [
+    {
+      "repo": "ahadiwasti/DSA",
+      "category": "DSA",
+      "active": true
+    },
+    {
+      "repo": "ahadiwasti/System-Design",
+      "category": "System Design",
+      "active": false
+    },
+    {
+      "repo": "ahadiwasti/CoreTech",
+      "category": "Core Tech",
+      "active": false
+    },
+    {
+      "repo": "ahadiwasti/Python",
+      "category": "Python",
+      "active": false
+    }
+  ]
+}
