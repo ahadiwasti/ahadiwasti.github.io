@@ -40,105 +40,82 @@
     <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
   </footer>
 
-  <script>
-    const GITHUB_USER = "ahadiwasti";
-    const GITHUB_REPO = "ahadiwasti.github.io";
-    const POSTS_PATH = "blog/posts";
-    const GITHUB_API = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${POSTS_PATH}`;
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const preselectedCategory = params.get("category") || "all";
+  let allPosts = [];
 
-    let allPosts = [];
-    const params = new URLSearchParams(window.location.search);
-    const preselectedCategory = params.get("category") || "all";
+  async function loadAllPosts() {
+    const res = await fetch("blog/posts.json");
+    allPosts = await res.json();
 
-    async function loadAllPosts() {
-      const res = await fetch(GITHUB_API);
-      const items = await res.json();
-      const categories = items.filter(i => i.type === "dir");
-
-      // Populate category dropdown
-      const catSelect = document.getElementById("category-filter");
-      categories.forEach(cat => {
-        const opt = document.createElement("option");
-        opt.value = cat.name;
-        opt.textContent = cat.name.replace(/-/g, " ");
-        if (cat.name === preselectedCategory) opt.selected = true;
-        catSelect.appendChild(opt);
-      });
-
-      // Update page title if preselected
-      if (preselectedCategory !== "all") {
-        document.getElementById("page-title").textContent = preselectedCategory.replace(/-/g, " ");
-        document.title = `${preselectedCategory.replace(/-/g, " ")} — ahadiwasti`;
-      }
-
-      // Fetch all posts
-      for (const cat of categories) {
-        const r = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${cat.path}`);
-        const files = await r.json();
-        files.filter(f => f.name.endsWith(".md")).forEach(file => {
-          const parts = file.name.replace(".md", "").split("-");
-          const date = parts.slice(0, 3).join("-");
-          const title = parts.slice(3).join(" ");
-          allPosts.push({
-            title: title.charAt(0).toUpperCase() + title.slice(1),
-            date,
-            category: cat.name,
-            download_url: file.download_url
-          });
-        });
-      }
-
-      renderAll();
-    }
-
-    function renderAll() {
-      const query = document.getElementById("search").value.toLowerCase();
-      const catFilter = document.getElementById("category-filter").value;
-      const sort = document.getElementById("sort").value;
-
-      let filtered = allPosts
-        .filter(p => catFilter === "all" || p.category === catFilter)
-        .filter(p => p.title.toLowerCase().includes(query));
-
-      if (sort === "newest") filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-      if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-      if (sort === "alpha") filtered.sort((a, b) => a.title.localeCompare(b.title));
-
-      document.getElementById("post-count").textContent =
-        `${filtered.length} post${filtered.length !== 1 ? "s" : ""}`;
-
-      const container = document.getElementById("all-posts-list");
-      container.innerHTML = "";
-
-      if (filtered.length === 0) {
-        container.innerHTML = "<p class='empty'>No posts found.</p>";
-        return;
-      }
-
-      filtered.forEach(post => {
-        const div = document.createElement("div");
-        div.className = "post-card";
-        div.innerHTML = `
-          <div class="post-meta">
-            <span class="tag">${post.category.replace(/-/g, " ")}</span>
-            <span class="date">${post.date}</span>
-          </div>
-          <h3>
-            <a href="post.html?url=${encodeURIComponent(post.download_url)}">${post.title}</a>
-          </h3>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    document.getElementById("search").addEventListener("input", renderAll);
-    document.getElementById("category-filter").addEventListener("change", renderAll);
-    document.getElementById("sort").addEventListener("change", renderAll);
-
-    document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Loading...</p>";
-    loadAllPosts().catch(() => {
-      document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Could not load posts.</p>";
+    // Populate category dropdown
+    const categories = [...new Set(allPosts.map(p => p.category))];
+    const catSelect = document.getElementById("category-filter");
+    categories.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat.replace(/-/g, " ");
+      if (cat === preselectedCategory) opt.selected = true;
+      catSelect.appendChild(opt);
     });
-  </script>
+
+    if (preselectedCategory !== "all") {
+      document.getElementById("page-title").textContent = preselectedCategory.replace(/-/g, " ");
+      document.title = `${preselectedCategory.replace(/-/g, " ")} — ahadiwasti`;
+    }
+
+    renderAll();
+  }
+
+  function renderAll() {
+    const query = document.getElementById("search").value.toLowerCase();
+    const catFilter = document.getElementById("category-filter").value;
+    const sort = document.getElementById("sort").value;
+
+    let filtered = allPosts
+      .filter(p => catFilter === "all" || p.category === catFilter)
+      .filter(p => p.title.toLowerCase().includes(query));
+
+    if (sort === "newest") filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (sort === "alpha") filtered.sort((a, b) => a.title.localeCompare(b.title));
+
+    document.getElementById("post-count").textContent =
+      `${filtered.length} post${filtered.length !== 1 ? "s" : ""}`;
+
+    const container = document.getElementById("all-posts-list");
+    container.innerHTML = "";
+
+    if (filtered.length === 0) {
+      container.innerHTML = "<p class='empty'>No posts found.</p>";
+      return;
+    }
+
+    filtered.forEach(post => {
+      const div = document.createElement("div");
+      div.className = "post-card";
+      div.innerHTML = `
+        <div class="post-meta">
+          <span class="tag">${post.category.replace(/-/g, " ")}</span>
+          <span class="date">${post.date}</span>
+        </div>
+        <h3>
+          <a href="post.html?url=${encodeURIComponent(post.url)}">${post.title}</a>
+        </h3>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  document.getElementById("search").addEventListener("input", renderAll);
+  document.getElementById("category-filter").addEventListener("change", renderAll);
+  document.getElementById("sort").addEventListener("change", renderAll);
+
+  document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Loading...</p>";
+  loadAllPosts().catch(() => {
+    document.getElementById("all-posts-list").innerHTML = "<p class='empty'>Could not load posts.</p>";
+  });
+</script>
 </body>
 </html>
