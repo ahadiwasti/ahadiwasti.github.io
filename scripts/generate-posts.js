@@ -46,6 +46,7 @@ function processDir(dir, topCat, subCat = null) {
       date: fm.created_at || fallbackDate,
       category: fm.category || topCat,
       subcategory: fm.subcategory || subCat,
+      breadcrumb: fm.breadcrumb || null,
       path: relativePath,
       url: `https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/${relativePath.split("/").map(encodeURIComponent).join("/")}`
     });
