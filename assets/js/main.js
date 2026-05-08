@@ -75,13 +75,6 @@ function postCardHTML(post) {
     ? `<span class="date" title="Updated ${post.updated_at}">📝 ${post.date}</span>`
     : `<span class="date">${post.date}</span>`;
 
-  // Build breadcrumb pills from path
-  const breadcrumbs = post.breadcrumb
-    ? post.breadcrumb.split("/").map(b =>
-        `<span class="subtag">${b.replace(/-/g, " ")}</span>`
-      ).join("")
-    : "";
-
   return `
     <a href="post.html?url=${encodeURIComponent(post.url)}" class="post-card">
       <div class="post-meta">
@@ -90,12 +83,11 @@ function postCardHTML(post) {
       <h3>${post.title}</h3>
       <div class="post-tags">
         <span class="tag">${post.category}</span>
-        ${breadcrumbs}
+        ${post.subcategory ? `<span class="subtag">${post.subcategory.replace(/-/g, " ")}</span>` : ""}
       </div>
     </a>
   `;
 }
-
 document.getElementById("posts-list").innerHTML = "<p class='empty'>Loading posts...</p>";
 buildPostList().catch(err => {
   console.error(err);
