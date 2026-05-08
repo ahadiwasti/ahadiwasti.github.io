@@ -1,30 +1,8 @@
 [
   {
-    "title": "Redis",
-    "date": "2026-05-08",
-    "category": "Core Tech",
-    "subcategory": null,
-    "path": "blog/posts/Core Tech/2026-05-08-redis.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/Core%20Tech/2026-05-08-redis.md"
-  },
-  {
-    "title": "Rate limiter",
-    "date": "2026-05-08",
-    "category": "System Design",
-    "subcategory": null,
-    "path": "blog/posts/System Design/2026-05-08-rate-limiter.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/System%20Design/2026-05-08-rate-limiter.md"
-  },
-  {
-    "title": "Merge two strings",
-    "date": "2026-05-05",
-    "category": "DSA",
-    "subcategory": "Array",
-    "path": "blog/posts/DSA/Array/2026-05-05-merge-two-strings.md",
-    "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Array/2026-05-05-merge-two-strings.md"
-  },
-  {
     "title": "Maximum number of vowels in a substring of given length",
+    "created_at": "2025-10-13",
+    "updated_at": "2025-10-13",
     "date": "2025-10-13",
     "category": "DSA",
     "subcategory": "Array",
@@ -32,7 +10,9 @@
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Array/2025-10-13-maximum-number-of-vowels-in-a-substring-of-given-length.md"
   },
   {
-    "title": "Maximum average subarray i",
+    "title": "Maximum Average Subarray I",
+    "created_at": "2025-10-11",
+    "updated_at": "2025-10-11",
     "date": "2025-10-11",
     "category": "DSA",
     "subcategory": "Array",
@@ -40,7 +20,9 @@
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Array/2025-10-11-maximum-average-subarray-i.md"
   },
   {
-    "title": "Max number of k sum pairs",
+    "title": "Max Number of K Sum Pairs",
+    "created_at": "2025-10-10",
+    "updated_at": "2025-10-10",
     "date": "2025-10-10",
     "category": "DSA",
     "subcategory": "Array",
@@ -49,6 +31,8 @@
   },
   {
     "title": "Canvas",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-10-06",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -57,6 +41,8 @@
   },
   {
     "title": "Code",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-09-30",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -65,6 +51,8 @@
   },
   {
     "title": "Complexity",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-09-30",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -73,6 +61,8 @@
   },
   {
     "title": "Constraints",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-09-30",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -81,6 +71,8 @@
   },
   {
     "title": "Ideas",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-09-30",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -89,6 +81,8 @@
   },
   {
     "title": "Practice",
+    "created_at": "2025-09-30",
+    "updated_at": "2025-09-30",
     "date": "2025-09-30",
     "category": "DSA",
     "subcategory": "Introduction",
@@ -96,7 +90,9 @@
     "url": "https://raw.githubusercontent.com/ahadiwasti/ahadiwasti.github.io/main/blog/posts/DSA/Introduction/2025-09-30-practice.md"
   },
   {
-    "title": "Alternatively merge two strings",
+    "title": "Alternatively Merge two Strings",
+    "created_at": "2025-09-29",
+    "updated_at": "2026-05-08",
     "date": "2025-09-29",
     "category": "DSA",
     "subcategory": "Array",
