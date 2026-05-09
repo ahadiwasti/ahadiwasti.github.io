@@ -31,14 +31,14 @@ body {
 
 /* ── Banner ── */
 .banner {
-  background: #854F0B;
-  color: #FAC775;
+  background:var(--accent);
+  color: var(--text);
   text-align: center;
   font-size: 0.82rem;
   font-weight: 600;
   padding: 0.65rem 1rem;
   letter-spacing: 0.03em;
-  border-bottom: 1px solid #EF9F27;
+  border-bottom: 1px solid var(--accent2);
   width: 100%;
 }
 a {
@@ -918,8 +918,8 @@ body.light .theme-toggle {
 }
 
 body.light .banner {
-  background: #854F0B;
-  color: #FAC775;
+  background:  var(--accent);
+  color: var(--text);
 }
 /* ── 404 page ── */
 
