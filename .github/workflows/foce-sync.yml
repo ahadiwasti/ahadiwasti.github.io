@@ -25,11 +25,8 @@ jobs:
             category: System-Design
 
     steps:
-      - name: Skip if not selected
-        if: ${{ github.event.inputs.repo != 'all' && github.event.inputs.repo != matrix.category }}
-        run: echo "Skipping ${{ matrix.category }}" && exit 0
-
       - name: Checkout source repo
+        if: ${{ github.event.inputs.repo == 'all' || github.event.inputs.repo == matrix.category }}
         uses: actions/checkout@v4
         with:
           repository: ${{ matrix.repo }}
@@ -37,6 +34,7 @@ jobs:
           path: source
 
       - name: Checkout portfolio repo
+        if: ${{ github.event.inputs.repo == 'all' || github.event.inputs.repo == matrix.category }}
         uses: actions/checkout@v4
         with:
           repository: ahadiwasti/ahadiwasti.github.io
@@ -44,6 +42,7 @@ jobs:
           path: portfolio
 
       - name: Clear and resync all posts
+        if: ${{ github.event.inputs.repo == 'all' || github.event.inputs.repo == matrix.category }}
         env:
           GH_TOKEN: ${{ secrets.PORTFOLIO_TOKEN }}
         run: |
@@ -52,18 +51,16 @@ jobs:
 
           echo "=== Resyncing $REPO_CATEGORY ==="
 
-          # Clear existing posts for this category
           rm -rf portfolio/blog/posts/$REPO_CATEGORY
           mkdir -p portfolio/blog/posts/$REPO_CATEGORY
 
-          # Find all README.md files at any depth, skip root and .github
           find source -name "README.md" | grep -v "source/.github" | grep -v "^source/README.md$" | while read file; do
             RELATIVE=$(echo "$file" | sed 's|source/||' | sed 's|/README.md||')
             DEPTH=$(echo "$RELATIVE" | tr '/' '\n' | wc -l)
             TITLE=$(echo "$RELATIVE" | awk -F'/' '{print $NF}')
 
             if [ "$DEPTH" -eq 1 ]; then
-              SUBCATEGORY=$RELATIVE
+              SUBCATEGORY=""
               BREADCRUMB=""
             elif [ "$DEPTH" -eq 2 ]; then
               SUBCATEGORY=$(echo "$RELATIVE" | cut -d'/' -f1)
@@ -75,7 +72,6 @@ jobs:
 
             echo "Processing: $RELATIVE | Subcategory: $SUBCATEGORY | Breadcrumb: $BREADCRUMB"
 
-            # Skip if publish: false
             if grep -q "publish: false" "$file" 2>/dev/null; then
               echo "Skipping $RELATIVE (publish: false)"
               continue
@@ -87,7 +83,11 @@ jobs:
 
             FILENAME=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
 
-            mkdir -p "portfolio/blog/posts/$REPO_CATEGORY/$SUBCATEGORY"
+            OUTPUT_DIR="portfolio/blog/posts/$REPO_CATEGORY"
+            if [ ! -z "$SUBCATEGORY" ]; then
+              OUTPUT_DIR="$OUTPUT_DIR/$SUBCATEGORY"
+            fi
+            mkdir -p "$OUTPUT_DIR"
 
             {
               echo "---"
@@ -95,19 +95,22 @@ jobs:
               echo "created_at: $FIRST_DATE"
               echo "updated_at: $LAST_DATE"
               echo "category: $REPO_CATEGORY"
-              echo "subcategory: $SUBCATEGORY"
+              if [ ! -z "$SUBCATEGORY" ]; then
+                echo "subcategory: $SUBCATEGORY"
+              fi
               if [ ! -z "$BREADCRUMB" ]; then
                 echo "breadcrumb: $BREADCRUMB"
               fi
               echo "---"
               echo ""
               cat "$file"
-            } > "portfolio/blog/posts/$REPO_CATEGORY/$SUBCATEGORY/$FIRST_DATE-$FILENAME.md"
+            } > "$OUTPUT_DIR/$FIRST_DATE-$FILENAME.md"
 
-            echo "Synced: $TITLE → $FIRST_DATE-$FILENAME.md"
+            echo "Synced: $TITLE → $OUTPUT_DIR/$FIRST_DATE-$FILENAME.md"
           done
 
       - name: Commit and push
+        if: ${{ github.event.inputs.repo == 'all' || github.event.inputs.repo == matrix.category }}
         run: |
           cd portfolio
           git config user.name "github-actions"
