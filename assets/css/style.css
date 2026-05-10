@@ -912,6 +912,16 @@ body.light footer p {
   color: #222222;
 }
 
+body.light .tag {
+  background: #e6f4ef;
+  color: #1a7a5a;
+}
+
+body.light .subtag {
+  background: #edf7f3;
+  color: #2a8a68;
+}
+
 body.light .theme-toggle {
   border-color: #cccccc;
   color: #111111;

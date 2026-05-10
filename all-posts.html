@@ -20,6 +20,7 @@
     </header>
 
     <main>
+      <div id="filter-breadcrumb" class="post-breadcrumb" style="margin-bottom: 0.75rem;"></div>
       <div class="category-page-header">
         <h2 id="page-title">All Posts</h2>
         <span id="post-count" class="muted-count"></span>
@@ -60,6 +61,8 @@
     <script>
       const params = new URLSearchParams(window.location.search);
       const preselectedCategory = params.get("category") || "all";
+      const preselectedSubcategory = params.get("subcategory") || "";
+      const preselectedBreadcrumb = params.get("breadcrumb") || "";
       let allPosts = [];
 
       async function loadAllPosts() {
@@ -68,7 +71,7 @@
         allPosts = await res.json();
 
         const elapsed = Date.now() - start;
-        const remaining = Math.max(0, 1500 - elapsed);
+        const remaining = Math.max(0, 1000 - elapsed);
         await new Promise(resolve => setTimeout(resolve, remaining));
 
         // Populate category dropdown
@@ -82,12 +85,85 @@
           catSelect.appendChild(opt);
         });
 
-        if (preselectedCategory !== "all") {
-          document.getElementById("page-title").textContent = preselectedCategory.replace(/-/g, " ");
-          document.title = `${preselectedCategory.replace(/-/g, " ")} — ahadiwasti`;
+        // Set page title based on deepest filter applied
+        // hierarchy: breadcrumb > subcategory > category
+        if (preselectedBreadcrumb) {
+          const segments = preselectedBreadcrumb.split("/");
+          const deepest = segments[segments.length - 1].replace(/-/g, " ");
+          document.getElementById("page-title").textContent = deepest;
+          document.title = `${deepest} — ahadiwasti`;
+        } else if (preselectedSubcategory) {
+          const label = preselectedSubcategory.replace(/-/g, " ");
+          document.getElementById("page-title").textContent = label;
+          document.title = `${label} — ahadiwasti`;
+        } else if (preselectedCategory !== "all") {
+          const label = preselectedCategory.replace(/-/g, " ");
+          document.getElementById("page-title").textContent = label;
+          document.title = `${label} — ahadiwasti`;
         }
 
         renderAll();
+
+        // Build filter breadcrumb trail
+        const breadcrumbEl = document.getElementById("filter-breadcrumb");
+        const trail = [];
+
+        if (preselectedCategory !== "all") {
+          trail.push({
+            label: preselectedCategory.replace(/-/g, " "),
+            href: `all-posts.html?category=${encodeURIComponent(preselectedCategory)}`
+          });
+        }
+
+        if (preselectedSubcategory) {
+          trail.push({
+            label: preselectedSubcategory.replace(/-/g, " "),
+            href: `all-posts.html?category=${encodeURIComponent(preselectedCategory)}&subcategory=${encodeURIComponent(preselectedSubcategory)}`
+          });
+        }
+
+        if (preselectedBreadcrumb) {
+          preselectedBreadcrumb.split("/").forEach((seg, i, arr) => {
+            const path = arr.slice(0, i + 1).join("/");
+            trail.push({
+              label: seg.replace(/-/g, " "),
+              href: `all-posts.html?category=${encodeURIComponent(preselectedCategory)}&subcategory=${encodeURIComponent(preselectedSubcategory)}&breadcrumb=${encodeURIComponent(path)}`
+            });
+          });
+        }
+
+        // Last item is current page — not clickable
+        // Only show breadcrumb when deeper than top level category
+        if (trail.length <= 1) return;
+        breadcrumbEl.innerHTML = trail.map((item, i) => {
+          if (i === trail.length - 1) {
+            return `<span class="bc-current">${item.label}</span>`;
+          }
+          return `<a href="${item.href}" class="bc-item">${item.label}</a><span class="bc-sep">/</span>`;
+        }).join("");
+      }
+
+      function matchesFilter(post) {
+        // Category filter — if set, post must match
+        if (preselectedCategory !== "all" && post.category !== preselectedCategory) {
+          return false;
+        }
+
+        // Subcategory filter — if set, post must match
+        if (preselectedSubcategory && post.subcategory !== preselectedSubcategory) {
+          return false;
+        }
+
+        // Breadcrumb filter — if set, post breadcrumb must START WITH the filter path
+        // This makes it inclusive: filtering by "layer3" shows layer3 AND anything deeper
+        if (preselectedBreadcrumb) {
+          const postBreadcrumb = post.breadcrumb || "";
+          if (!postBreadcrumb.startsWith(preselectedBreadcrumb)) {
+            return false;
+          }
+        }
+
+        return true;
       }
 
       function renderAll() {
@@ -96,11 +172,12 @@
         const sort = document.getElementById("sort").value;
 
         let filtered = allPosts
+          .filter(p => matchesFilter(p))
           .filter(p => catFilter === "all" || p.category === catFilter)
           .filter(p => p.title.toLowerCase().includes(query));
 
         if (sort === "newest") filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-        if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new new Date(b.date));
+        if (sort === "oldest") filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
         if (sort === "alpha") filtered.sort((a, b) => a.title.localeCompare(b.title));
 
         document.getElementById("post-count").textContent =

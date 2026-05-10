@@ -4,7 +4,7 @@ async function buildPostList() {
   const allPosts = await res.json();
 
   const elapsed = Date.now() - start;
-  const remaining = Math.max(0, 1500 - elapsed);
+  const remaining = Math.max(0, 1000 - elapsed);
   await new Promise(resolve => setTimeout(resolve, remaining));
 
   window.allPosts = allPosts;

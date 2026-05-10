@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" id="meta-description" content="ahadiwasti — Senior Software Engineer building in public."/>
-<meta property="og:title" id="og-title" content="ahadiwasti — Senior Software Engineer"/>
-<meta property="og:description" id="og-description" content="ahadiwasti — Senior Software Engineer building in public."/>
-<meta property="og:url" id="og-url" content="https://ahadiwasti.com"/>
-<meta property="og:type" content="article"/>
-<meta property="og:image" content="https://ahadiwasti.com/assets/og-image.png"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" id="twitter-title" content="ahadiwasti — Senior Software Engineer"/>
-<meta name="twitter:description" id="twitter-description" content="ahadiwasti — Senior Software Engineer building in public."/>
-  <title>Post — ahadiwasti</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥷</text></svg>">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" id="meta-description" content="ahadiwasti — Senior Software Engineer building in public." />
+    <meta property="og:title" id="og-title" content="ahadiwasti — Senior Software Engineer" />
+    <meta property="og:description" id="og-description" content="ahadiwasti — Senior Software Engineer building in public." />
+    <meta property="og:url" id="og-url" content="https://ahadiwasti.com" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" id="og-image" content="https://ahadiwasti.com/assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" id="twitter-title" content="ahadiwasti — Senior Software Engineer" />
+    <meta name="twitter:description" id="twitter-description" content="ahadiwasti — Senior Software Engineer building in public." />
+    <title>Post — ahadiwasti</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥷</text></svg>" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  </head>
   <body>
     <header>
       <div class="header-inner">
         <a href="index.html" class="back">← Back to learning log</a>
         <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-          <svg
-            id="themeIcon"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
+          <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
           </svg>
         </button>
@@ -37,108 +31,131 @@
 
     <main>
       <article id="post-content">
-  <div class="post-loader">
-    <div class="loader-dots">
-      <span></span><span></span><span></span>
-    </div>
-    <p class="loader-text">Loading</p>
-  </div>
-</article>
+        <div class="post-loader">
+          <div class="loader-dots"><span></span><span></span><span></span></div>
+          <p class="loader-text">Loading</p>
+        </div>
+      </article>
     </main>
+
     <button class="back-to-top" id="backToTop" title="Back to top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 19V5M5 12l7-7 7 7"/>
+        <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
     </button>
+
     <footer>
-      <p>
-        Built in public ·
-        <a
-          href="https://github.com/ahadiwasti/ahadiwasti.github.io"
-          target="_blank"
-          >View source</a
-        >
-      </p>
+      <p>Built in public · <a href="https://github.com/ahadiwasti/ahadiwasti.github.io" target="_blank">View source</a></p>
     </footer>
 
     <script>
-   
-  document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    const url = params.get("url");
-    if (url) {
-      const start = Date.now();
-      fetch(decodeURIComponent(url))
-        .then((r) => r.text())
-        .then((md) => {
-          const elapsed = Date.now() - start;
-          const remaining = Math.max(0, 1500 - elapsed);
-          setTimeout(() => {
-            // Parse frontmatter
-            const fmMatch = md.match(/^---\n([\s\S]*?)\n---\n/);
-            const fm = {};
-            if (fmMatch) {
-              fmMatch[1].split("\n").forEach((line) => {
-                const [key, ...val] = line.split(":");
-                if (key && val) fm[key.trim()] = val.join(":").trim();
-              });
-            }
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const url = params.get("url");
+        if (url) {
+          const start = Date.now();
+          fetch(decodeURIComponent(url))
+            .then((r) => r.text())
+            .then((md) => {
+              const elapsed = Date.now() - start;
+              const remaining = Math.max(0, 1000 - elapsed);
+              setTimeout(() => {
 
-            // Strip frontmatter from content
-            const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+                // Parse frontmatter
+                const fmMatch = md.match(/^---\n([\s\S]*?)\n---\n/);
+                const fm = {};
+                if (fmMatch) {
+                  fmMatch[1].split("\n").forEach((line) => {
+                    const [key, ...val] = line.split(":");
+                    if (key && val) fm[key.trim()] = val.join(":").trim();
+                  });
+                }
 
-            // Build breadcrumb
-            const parts = [
-              fm.category,
-              fm.subcategory,
-              ...(fm.breadcrumb ? fm.breadcrumb.split("/") : []),
-            ].filter(Boolean);
+                // Strip frontmatter from content
+                const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
 
-            const breadcrumb = parts.map((p, i) => {
-              const label = p.replace(/-/g, " ");
-              if (i === parts.length - 1) {
-                return `<span class="bc-current">${label}</span>`;
-              }
-              const href = i === 0
-                ? `all-posts.html?category=${encodeURIComponent(fm.category)}`
-                : `all-posts.html?category=${encodeURIComponent(fm.category)}&subcategory=${encodeURIComponent(p)}`;
-              return `<a href="${href}" class="bc-item">${label}</a><span class="bc-sep">/</span>`;
-            }).join("");
+                // Build breadcrumb
+                // Structure: Category (clickable) / Subcategory (clickable) / Breadcrumb segments (all clickable) / Title (not clickable)
+                // Each segment links to all-posts filtered by that level
+                const category = fm.category || "";
+                const subcategory = fm.subcategory || "";
+                const breadcrumbSegments = fm.breadcrumb ? fm.breadcrumb.split("/") : [];
+                const title = fm.title || "";
 
-            // Set page title
-            document.title = `${fm.title || "Post"} — ahadiwasti`;
-            // Dynamic meta tags
-const description = content.replace(/[#*`\[\]]/g, "").trim().split("\n").find(l => l.trim().length > 50) || "Read this post on ahadiwasti.com";
-const shortDesc = description.slice(0, 160);
-const pageTitle = `${fm.title} — ahadiwasti`;
+                const crumbs = [];
 
-document.getElementById("meta-description").setAttribute("content", shortDesc);
-document.getElementById("og-title").setAttribute("content", pageTitle);
-document.getElementById("og-description").setAttribute("content", shortDesc);
-document.getElementById("og-url").setAttribute("content", window.location.href);
-document.getElementById("twitter-title").setAttribute("content", pageTitle);
-document.getElementById("twitter-description").setAttribute("content", shortDesc);
-            // Inject breadcrumb + content
-            document.getElementById("post-content").innerHTML = `
-              <div class="post-breadcrumb">${breadcrumb}</div>
-              <div class="post-dates">
-                <span>Published ${fm.created_at}</span>
-                ${fm.updated_at && fm.updated_at !== fm.created_at
-                  ? `<span class="updated">· Updated ${fm.updated_at}</span>`
-                  : ""}
-              </div>
-              <div class="post-body">${marked.parse(content)}</div>
-            `;
-          }, remaining);
-        })
-        .catch(() => {
-          document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
-        });
-    }
-  });
+                // Category — always first, links to category filter
+                if (category) {
+                  crumbs.push({
+                    label: category.replace(/-/g, " "),
+                    href: `all-posts.html?category=${encodeURIComponent(category)}`
+                  });
+                }
 
+                // Subcategory — clickable, links to category+subcategory filter
+                if (subcategory) {
+                  crumbs.push({
+                    label: subcategory.replace(/-/g, " "),
+                    href: `all-posts.html?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}`
+                  });
+                }
+
+                // Breadcrumb segments — each one clickable
+                // Each segment links progressively deeper into the breadcrumb path
+                breadcrumbSegments.forEach((seg, i) => {
+                  const breadcrumbPath = breadcrumbSegments.slice(0, i + 1).join("/");
+                  crumbs.push({
+                    label: seg.replace(/-/g, " "),
+                    href: `all-posts.html?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}&breadcrumb=${encodeURIComponent(breadcrumbPath)}`
+                  });
+                });
+
+                // Build the breadcrumb HTML
+                // All crumbs are clickable links, title is the non-clickable current page
+                const breadcrumbHTML = [
+                  ...crumbs.map(c =>
+                    `<a href="${c.href}" class="bc-item">${c.label}</a><span class="bc-sep">/</span>`
+                  ),
+                  title ? `<span class="bc-current">${title.replace(/-/g, " ")}</span>` : ""
+                ].join("");
+
+                // Set page title
+                document.title = `${title || "Post"} — ahadiwasti`;
+
+                // Dynamic meta tags
+                const description =
+                  content.replace(/[#*`\[\]]/g, "").trim().split("\n").find((l) => l.trim().length > 50) ||
+                  "Read this post on ahadiwasti.com";
+                const shortDesc = description.slice(0, 160);
+                const pageTitle = `${title} — ahadiwasti`;
+
+                document.getElementById("meta-description").setAttribute("content", shortDesc);
+                document.getElementById("og-title").setAttribute("content", pageTitle);
+                document.getElementById("og-description").setAttribute("content", shortDesc);
+                document.getElementById("og-url").setAttribute("content", window.location.href);
+                document.getElementById("twitter-title").setAttribute("content", pageTitle);
+                document.getElementById("twitter-description").setAttribute("content", shortDesc);
+
+                // Inject breadcrumb + content
+                document.getElementById("post-content").innerHTML = `
+                  <div class="post-breadcrumb">${breadcrumbHTML}</div>
+                  <div class="post-dates">
+                    <span>Published ${fm.created_at}</span>
+                    ${fm.updated_at && fm.updated_at !== fm.created_at
+                      ? `<span class="updated">· Updated ${fm.updated_at}</span>`
+                      : ""}
+                  </div>
+                  <div class="post-body">${marked.parse(content)}</div>
+                `;
+
+              }, remaining);
+            })
+            .catch(() => {
+              document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
+            });
+        }
+      });
     </script>
     <script src="assets/js/theme.js"></script>
-    
   </body>
 </html>
