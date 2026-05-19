@@ -12,7 +12,7 @@ on:
           - all
           - DSA
           - System-Design
-
+          - Software-Engineering
 jobs:
   resync:
     runs-on: ubuntu-latest
@@ -23,7 +23,8 @@ jobs:
             category: DSA
           - repo: ahadiwasti/System-Design
             category: System-Design
-
+          - repo: ahadiwasti/Software-Engineering
+            category: Software-Engineering
     steps:
       - name: Checkout source repo
         if: ${{ github.event.inputs.repo == 'all' || github.event.inputs.repo == matrix.category }}
