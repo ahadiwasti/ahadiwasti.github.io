@@ -36,7 +36,7 @@ If step 2 fails,  step 1 must be undone. Otherwise $500 just disappears. That ro
 
 ## A — Atomicity
 
-**All or nothing..**
+**All or nothing.**
 
 A transaction either commits fully or rolls back completely. There is no in-between state. If any operation inside the transaction fails, the entire transaction is undone as if it never happened.
 
