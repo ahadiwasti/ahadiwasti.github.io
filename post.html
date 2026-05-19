@@ -73,6 +73,12 @@
 
                 // Strip frontmatter from content
                 const content = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+                // Fix relative image paths → absolute raw GitHub URLs
+                const rawBase = decodeURIComponent(url).replace(/[^/]+\.md$/, "");
+                const contentWithFixedImages = content.replace(
+                  /!\[([^\]]*)\]\(\.\/([^)]+)\)/g,
+                  `![$1](${rawBase}$2)`
+                );
 
                 // Build breadcrumb
                 // Structure: Category (clickable) / Subcategory (clickable) / Breadcrumb segments (all clickable) / Title (not clickable)
@@ -145,12 +151,13 @@
                       ? `<span class="updated">· Updated ${fm.updated_at}</span>`
                       : ""}
                   </div>
-                  <div class="post-body">${marked.parse(content)}</div>
+                  <div class="post-body">${marked.parse(contentWithFixedImages)}</div>
                 `;
 
               }, remaining);
             })
             .catch(() => {
+              
               document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
             });
         }
