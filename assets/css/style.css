@@ -1008,6 +1008,14 @@ body.light .banner {
   flex-shrink: 0;
   margin-top: 0.25rem;
 }
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 1.5rem auto;
+}
 /* ── Responsive ── */
 /* 
 @media (max-width: 600px) {
