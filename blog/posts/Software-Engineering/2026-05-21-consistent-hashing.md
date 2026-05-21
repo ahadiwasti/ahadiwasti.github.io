@@ -15,6 +15,8 @@ This is exactly what consistent hashing solves. By the end of this article you w
 
 ---
 
+![Consistent-hashing](./consistent-hashing.png)
+
 ## A Simple System That Works, Until It Does Not
 
 Imagine you are building an ordering platform. At the start, everything is simple. One application server, one database, clients sending requests. It works perfectly.
